@@ -66,6 +66,11 @@ def _normalized(p):
 
 DEFAULT_NEWLINES = u"\n"
 
+class PipfileCategories(object):
+    def __init__(self, build_package_list):
+        self.build_package_list = build_package_list
+    def __getitem__(self, item):
+        return self.build_package_list(item + "-packages")
 
 class _LockFileEncoder(json.JSONEncoder):
     """A specilized JSON encoder to convert loaded TOML data into a lock file.
@@ -720,7 +725,9 @@ class Project(object):
     def dev_packages(self):
         """Returns a list of dev-packages, for pip-tools to consume."""
         return self._build_package_list("dev-packages")
-
+    @property
+    def category_packages(self):
+        return PipfileCategories(self._build_package_list)
     @property
     def pipfile_is_empty(self):
         if not self.pipfile_exists:
