@@ -251,7 +251,7 @@ def install(
         packages=state.installstate.packages,
         editable_packages=state.installstate.editables,
         site_packages=state.site_packages,
-
+        category=state.installstate.category
     )
     if retcode:
         ctx.abort()
