@@ -1898,6 +1898,7 @@ def do_install(
     keep_outdated=False,
     selective_upgrade=False,
     site_packages=None,
+    category=None
 ):
     from .environments import PIPENV_VIRTUALENV, PIPENV_USE_SYSTEM
     from .vendor.pip_shims.shims import PipError
