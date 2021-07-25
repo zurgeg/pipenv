@@ -185,15 +185,25 @@ def _dev_option(f, help_text):
     return option("--dev", "-d", is_flag=True, default=False, type=click.types.BOOL,
                   help=help_text, callback=callback,
                   expose_value=False, show_envvar=True)(f)
-
+def _category_option(f, help_text):
+    def callback(ctx, param, value):
+        state = ctx.ensure_object(State)
+        state.installstate.category = value
+        return value
+    return option("--category", default=None, type=click.types.STRING,
+                    help=help_text, callback=callback, show_envvar=True)(f)
 
 def install_dev_option(f):
     return _dev_option(f, "Install both develop and default packages")
 
+def install_category_option(f):
+    return _category_option(f, "Install both packages from the given category and default packages.")
 
 def lock_dev_option(f):
     return _dev_option(f, "Generate both develop and default requirements")
 
+def lock_category_option(f):
+    return _category_option(f, "Generate both requirements from the given category and default requirements")
 
 def uninstall_dev_option(f):
     return _dev_option(f, "Deprecated (as it has no effect). May be removed in a future release.")
@@ -461,6 +471,7 @@ def install_options(f):
     f = ignore_pipfile_option(f)
     f = editable_option(f)
     f = package_arg(f)
+    f = install_category_option(f)
     return f
 
 
