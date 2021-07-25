@@ -452,12 +452,14 @@ def lock_options(f):
     f = emit_requirements_flag(f)
     f = emit_requirements_header_flag(f)
     f = dev_only_flag(f)
+    f = lock_category_option(f)
     return f
 
 
 def sync_options(f):
     f = install_base_options(f)
     f = install_dev_option(f)
+    f = install_category_option(f)
     f = sequential_option(f)
     return f
 
