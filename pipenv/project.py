@@ -995,7 +995,7 @@ class Project(object):
                 del parsed[section][pkg_name]
         self.write_toml(parsed)
 
-    def add_package_to_pipfile(self, package, dev=False):
+    def add_package_to_pipfile(self, package, dev=False, category=None):
         from .vendor.requirementslib import Requirement
 
         # Read and append Pipfile.
@@ -1005,6 +1005,8 @@ class Project(object):
             package = Requirement.from_line(package.strip())
         req_name, converted = package.pipfile_entry
         key = "dev-packages" if dev else "packages"
+        if category:
+            key = category + "-packages"
         # Set empty group if it doesn't exist yet.
         if key not in p:
             p[key] = {}
