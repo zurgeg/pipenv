@@ -2045,7 +2045,7 @@ def do_install(
                     )[0]
             except KeyError:
                 pass
-    # Install all dependencies, if none was provided.
+    # Install all dependencies, if none were provided.
     # This basically ensures that we have a pipfile and lockfile, then it locks and
     # installs from the lockfile
     if not packages and not editable_packages:
