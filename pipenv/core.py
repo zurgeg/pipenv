@@ -2068,6 +2068,8 @@ def do_install(
 
     # This is for if the user passed in dependencies, then we want to make sure we
     else:
+        if dev and category:
+            raise exceptions.PipenvUsageError("Using --dev and --category together while installing a package does not make sense.")
         from .vendor.requirementslib.models.requirements import Requirement
 
         # make a tuple of (display_name, entry)
@@ -2165,18 +2167,20 @@ def do_install(
                             crayons.yellow("$ pipenv lock"),
                         )
                     )
+                display_category = dev if dev else category
+                pkg_category = crayons.yellow(display_category + u"-packages]" if dev or category else u"[packages]", bold=True)
                 sp.write(vistir.compat.fs_str(
                     u"{0} {1} {2} {3}{4}".format(
                         crayons.normal(u"Adding", bold=True),
                         crayons.green(u"{0}".format(pkg_requirement.name), bold=True),
                         crayons.normal(u"to Pipfile's", bold=True),
-                        crayons.yellow(u"[dev-packages]" if dev else u"[packages]", bold=True),
+                        crayons.yellow(pkg_category, bold=True),
                         crayons.normal(fix_utf8("..."), bold=True),
                     )
                 ))
                 # Add the package to the Pipfile.
                 try:
-                    project.add_package_to_pipfile(pkg_requirement, dev)
+                    project.add_package_to_pipfile(pkg_requirement, dev, category)
                 except ValueError:
                     import traceback
                     sp.write_err(
