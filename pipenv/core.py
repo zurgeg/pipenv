@@ -2032,6 +2032,8 @@ def do_install(
 
         for i, package in enumerate(package_args[:]):
             section = project.packages if not dev else project.dev_packages
+            if category:
+                [section.append(r) for r in project.category_packages[category]]
             package = Requirement.from_line(package)
             package__name, package__val = package.pipfile_entry
             try:
